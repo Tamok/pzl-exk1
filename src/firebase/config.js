@@ -1,4 +1,5 @@
 import { initializeApp } from "firebase/app";
+import { logEvent } from "../utils/logger";
 
 const firebaseConfig = {
     apiKey: "AIzaSyBO74eBJJ864xdZwqum5wn9jBhIizpcpVo",
@@ -11,4 +12,5 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+logEvent('Firebase', 'Firebase initialized');
 export default app;
