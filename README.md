@@ -1,6 +1,6 @@
 # PZL-EXK1
 
-A cyberpunk-themed _cadavre exquis_ publishing platform built with React, Firebase, and Tailwind CSS. The app allows public display of collaborative audio-text pieces and includes an authenticated admin interface for content management.
+A _cadavre exquis_ publishing platform built with React, Firebase, and Tailwind CSS. The app allows public display of collaborative audio-text pieces and includes an authenticated admin interface for content management.
 
 ---
 

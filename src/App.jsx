@@ -1,35 +1,41 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useState } from 'react';
+import { loginWithGoogle, observeAuthState, isAdminUser, auth } from './firebase/config';
+import { logEvent } from './utils/logger';
+import './App.css';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [user, setUser] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    observeAuthState((user) => {
+      setUser(user);
+      setIsAdmin(isAdminUser(user));
+      logEvent('AUTH', `User logged ${user ? 'in' : 'out'}: ${user?.email || 'N/A'}`);
+    });
+  }, []);
+
+  const handleLogin = () => {
+    loginWithGoogle().catch((err) => logEvent('ERROR', err.message));
+  };
+
+  const handleLogout = () => {
+    auth.signOut();
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div className="text-center p-4">
+      {user ? (
+        <div>
+          <p>Logged in as: {user.email}</p>
+          <p>{isAdmin ? 'You are admin' : 'You are a regular user'}</p>
+          <button className="bg-blue-500 text-white p-2 rounded" onClick={handleLogout}>Logout</button>
+        </div>
+      ) : (
+        <button className="bg-green-500 text-white p-2 rounded" onClick={handleLogin}>Login with Google</button>
+      )}
+    </div>
+  );
 }
 
-export default App
+export default App;
