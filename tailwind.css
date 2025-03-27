@@ -1,0 +1,43 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+/* Customizing theme directly in CSS (v4 feature) */
+@theme {
+  colors: {
+    primary: #3366ff,
+  };
+}
+
+@layer utilities {
+    .bg-random-1 {
+      background-color: #FF5733;
+    }
+    .dark\:bg-random-1 {
+      background-color: #D14C2C;
+    }
+    
+    .bg-random-2 {
+      background-color: #33FF57;
+    }
+    .dark\:bg-random-2 {
+      background-color: #2CA64C;
+    }
+    
+    .bg-random-3 {
+      background-color: #3357FF;
+    }
+    .dark\:bg-random-3 {
+      background-color: #2A47D1;
+    }
+    
+    .bg-random-4 {
+      background-color: #F333FF;
+    }
+    .dark\:bg-random-4 {
+      background-color: #C227CC;
+    }
+  }
+  
+/* Explicit source scanning for class usage */
+@source "./src/components/**/*.{jsx,tsx}";

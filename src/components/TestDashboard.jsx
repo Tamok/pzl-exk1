@@ -86,18 +86,20 @@ const TestDashboard = () => {
   };
 
   return (
-    <div className="p-4 bg-gray-800 rounded text-white">
+    <div className="p-4 rounded transition-colors duration-300
+                    bg-[var(--container-bg-light)] dark:bg-[var(--container-bg-dark)]
+                    text-[var(--text-light)] dark:text-[var(--text-dark)]">
       <h2 className="text-xl mb-2 cursor-pointer" onClick={() => setIsOpen(!isOpen)}>
         Admin Test Dashboard {isOpen ? '▲' : '▼'}
       </h2>
       {isOpen && (
         <>
           <div className="space-x-2 mb-4">
-            <button onClick={runAuthTest} className="bg-blue-500 px-2 py-1 rounded">Test Auth</button>
-            <button onClick={runFirestoreTest} className="bg-green-500 px-2 py-1 rounded">Test Firestore</button>
-            <button onClick={runStorageTest} className="bg-purple-500 px-2 py-1 rounded">Test Storage</button>
-            <button onClick={runCollectionRetrievalTest} className="bg-yellow-500 px-2 py-1 rounded">Retrieve Collection</button>
-            <button onClick={runRealtimeListenerTest} className="bg-red-500 px-2 py-1 rounded">Realtime Listener</button>
+            <button onClick={runAuthTest} className="bg-blue-500 px-2 py-1 rounded transition-colors duration-200">Test Auth</button>
+            <button onClick={runFirestoreTest} className="bg-green-500 px-2 py-1 rounded transition-colors duration-200">Test Firestore</button>
+            <button onClick={runStorageTest} className="bg-purple-500 px-2 py-1 rounded transition-colors duration-200">Test Storage</button>
+            <button onClick={runCollectionRetrievalTest} className="bg-yellow-500 px-2 py-1 rounded transition-colors duration-200">Retrieve Collection</button>
+            <button onClick={runRealtimeListenerTest} className="bg-red-500 px-2 py-1 rounded transition-colors duration-200">Realtime Listener</button>
           </div>
           <div className="mt-4">
             <h3 className="text-lg mb-1">Results:</h3>

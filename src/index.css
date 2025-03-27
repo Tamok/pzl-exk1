@@ -1,51 +1,69 @@
 /* src/index.css */
-
-/* Import Tailwind */
 @import "tailwindcss";
 
-/* Remove default margin/padding from the page */
+/* Box-sizing reset to avoid accidental overflow */
+html {
+  box-sizing: border-box;
+}
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
+/* Theme variables */
+:root {
+  --bg-light: #ffffff;
+  --text-light: #213547;
+  --btn-bg-light: #f9f9f9;
+  --btn-text-light: #1a1a1a;
+  --container-bg-light: #f1f5f9;
+  --link-light: #646cff;
+}
+
+.dark {
+  --bg-dark: #242424;
+  --text-dark: #ffffff;
+  --btn-bg-dark: #1a1a1a;
+  --btn-text-dark: #ffffff;
+  --container-bg-dark: #333333;
+  --link-dark: #a5a5ff;
+}
+
+/* Smooth transitions */
+html, body, .dark * {
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* Reset spacing, remove leftover centering */
 html, body {
   margin: 0;
   padding: 0;
-}
-
-npx:root {
+  width: 100%;
+  height: 100%;
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden; /* optional if you want to prevent any horizontal scroll */
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
+/* #root can simply be full width and auto height */
+#root {
+  width: 100%;
   min-height: 100vh;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+/* Default light theme */
+body {
+  background-color: var(--bg-light);
+  color: var(--text-light);
 }
 
+/* Dark theme override */
+.dark body {
+  background-color: var(--bg-dark);
+  color: var(--text-dark);
+}
+
+/* Global button styles */
 button {
   border-radius: 8px;
   border: 1px solid transparent;
@@ -53,27 +71,34 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: var(--btn-bg-light);
+  color: var(--btn-text-light);
   cursor: pointer;
-  transition: border-color 0.25s;
+  transition: border-color 0.25s, background-color 0.3s, color 0.3s;
 }
 button:hover {
-  border-color: #646cff;
+  border-color: var(--link-light);
 }
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+.dark button {
+  background-color: var(--btn-bg-dark);
+  color: var(--btn-text-dark);
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+/* Links */
+a {
+  font-weight: 500;
+  color: var(--link-light);
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+}
+.dark a {
+  color: var(--link-dark);
+}
+
+/* Headings */
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
 }

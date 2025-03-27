@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import { logEvent } from '../utils/logger';
 
 const DarkModeToggle = () => {
-  // Initialize from localStorage; default to light if not set
   const [isDark, setIsDark] = useState(() => localStorage.getItem('theme') === 'dark');
 
   useEffect(() => {
@@ -22,7 +21,9 @@ const DarkModeToggle = () => {
     <div className="p-4">
       <button
         onClick={() => setIsDark(!isDark)}
-        className="bg-gray-500 text-white px-3 py-1 rounded"
+        className="px-3 py-1 rounded transition-colors duration-200
+                   bg-[var(--btn-bg-light)] dark:bg-[var(--btn-bg-dark)]
+                   text-[var(--btn-text-light)] dark:text-[var(--btn-text-dark)]"
       >
         {isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
       </button>

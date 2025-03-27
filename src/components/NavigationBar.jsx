@@ -20,14 +20,20 @@ const NavigationBar = ({ entries, onNavigate, currentEntryId }) => {
   };
 
   return (
-    <nav className="flex items-center justify-center space-x-4 p-4 bg-gray-200 dark:bg-gray-800">
-      <button onClick={handlePrev} className="bg-blue-500 text-white px-3 py-1 rounded">
+    <nav className="flex items-center justify-center space-x-4 p-4
+                    bg-[var(--container-bg-light)] dark:bg-[var(--container-bg-dark)]
+                    transition-colors duration-300">
+      <button
+        onClick={handlePrev}
+        className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded transition-colors duration-200"
+      >
         Prev
       </button>
+
       <select
         onChange={handleSelectChange}
         value={currentEntryId}
-        className="p-2 rounded bg-white dark:bg-gray-700 dark:text-white"
+        className="p-2 rounded bg-white dark:bg-gray-700 dark:text-white transition-colors duration-200"
       >
         {entries.map((entry) => (
           <option key={entry.id} value={entry.id}>
@@ -35,7 +41,11 @@ const NavigationBar = ({ entries, onNavigate, currentEntryId }) => {
           </option>
         ))}
       </select>
-      <button onClick={handleNext} className="bg-blue-500 text-white px-3 py-1 rounded">
+
+      <button
+        onClick={handleNext}
+        className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded transition-colors duration-200"
+      >
         Next
       </button>
     </nav>
