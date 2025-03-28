@@ -83,7 +83,7 @@ const CadavreExquisEntryForm = () => {
       }
     });
     logEvent('FORM', `Winner Theme (auto-determined): ${themes[winnerThemeIndex].name}`);
-    themes.forEach((theme, index) => {
+    themes.forEach((theme, ) => {
       if (theme.isRunnerUp) {
         logEvent('FORM', `Runner-Up Theme marked: ${theme.name}`);
       }

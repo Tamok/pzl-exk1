@@ -1,4 +1,5 @@
 // src/firebase/config.js
+
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
