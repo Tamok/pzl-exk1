@@ -5,6 +5,7 @@ import DataExportTab from './DataManagement.DataExportTab';
 import DataImportTab from './DataManagement.DataImportTab';
 import DataCloudTab from './DataManagement.DataCloudTab';
 import DataWipeTab from './DataManagement.DataWipeTab';
+import DataSnapshotTab from './DataManagement.DataSnapshotTab';
 
 const DataManagement = () => {
   const [tab, setTab] = useState('export');
@@ -12,7 +13,7 @@ const DataManagement = () => {
   return (
     <div className="space-y-6">
       <div className="flex space-x-4 border-b pb-2 mb-4">
-        {['export', 'import', 'cloud', 'wipe'].map(t => (
+        {['export', 'import', 'cloud', 'snapshots', 'wipe'].map(t => (
           <button
             key={t}
             className={`px-4 py-2 font-semibold ${
@@ -28,11 +29,23 @@ const DataManagement = () => {
 
       {tab === 'export' && <DataExportTab />}
       {tab === 'import' && <DataImportTab />}
-      {tab === 'cloud' && <DataCloudTab onRestore={(raw) => {
+      {tab === 'cloud' && 
+      <DataCloudTab onRestore={(raw) => {
         setTab('import');
         const event = new CustomEvent('importPreview', { detail: raw });
         window.dispatchEvent(event);
       }} />}
+      {tab === 'snapshots' && (
+        <DataSnapshotTab
+          onRestore={(raw) => {
+            setTab('import');
+            setTimeout(() => {
+              const event = new CustomEvent('importPreview', { detail: raw });
+              window.dispatchEvent(event);
+            }, 0);
+          }}
+        />
+      )}
       {tab === 'wipe' && <DataWipeTab />}
     </div>
   );

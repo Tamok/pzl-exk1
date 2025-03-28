@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
 import { db } from '../firebase/config';
 import { logEvent } from '../utils/logger';
+import { createSnapshot } from '../utils/backup/createSnapshot';
 
 const DataWipeTab = () => {
   const [loadingTarget, setLoadingTarget] = useState('');
@@ -28,10 +29,11 @@ const DataWipeTab = () => {
 
       <div className="flex flex-wrap gap-3">
         <button
-          onClick={() => {
+          onClick={async () => {
             const confirmed = confirm('Really wipe all entries?');
             if (!confirmed) return;
             setLoadingTarget('cadavres_exquis');
+            await createSnapshot('pre-entries-wipe');
             wipe('cadavres_exquis').finally(() => setLoadingTarget(''));
           }}
           className="bg-red-700 text-white px-4 py-2 rounded disabled:opacity-50"
@@ -41,10 +43,11 @@ const DataWipeTab = () => {
         </button>
 
         <button
-          onClick={() => {
+          onClick={async () => {
             const confirmed = confirm('Really wipe all players (including mappings)?');
             if (!confirmed) return;
             setLoadingTarget('players');
+            await createSnapshot('pre-player-wipe');
             wipe(['players', 'player_mappings']).finally(() => setLoadingTarget(''));
           }}
           className="bg-red-700 text-white px-4 py-2 rounded disabled:opacity-50"
@@ -58,6 +61,7 @@ const DataWipeTab = () => {
             const confirmed = confirm('Really wipe all entries, players, and player mappings?');
             if (!confirmed) return;
             setLoadingTarget('all');
+            await createSnapshot('pre-complete-wipe');
             try {
               await wipe('cadavres_exquis');
               await wipe(['players', 'player_mappings']);

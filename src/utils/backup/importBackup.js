@@ -5,6 +5,7 @@ import { db } from '../../firebase/config';
 import { logEvent } from '../logger';
 import { CURRENT_DB_VERSION } from '../../constants';
 import { runMigrationIfNeeded } from './migration';
+import { createSnapshot } from './createSnapshot';
 
 /**
  * Remove any undefined fields from an object to satisfy Firestore's requirements
@@ -20,6 +21,7 @@ export async function importBackup(backup) {
   const migrated = await runMigrationIfNeeded(backup);
   const { data, dbVersion } = migrated;
   const counts = { entries: 0, players: 0 };
+  await createSnapshot('pre-import');
 
   // Import entries
   if (Array.isArray(data?.cadavres_exquis)) {

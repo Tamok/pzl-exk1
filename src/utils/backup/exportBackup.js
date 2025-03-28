@@ -2,7 +2,7 @@
 
 import { db } from '../../firebase/config';
 import { collection, getDocs, addDoc, serverTimestamp } from 'firebase/firestore';
-import { currentDbVersion } from './migration';
+import { CURRENT_DB_VERSION } from '../../constants';
 import { buildBackupSchema } from './backupSchema';
 
 export async function exportBackup({ includePlayers = true, uploadToCloud = false }) {
@@ -20,12 +20,12 @@ export async function exportBackup({ includePlayers = true, uploadToCloud = fals
   const backup = buildBackupSchema({
     filters,
     data,
-    dbVersion: currentDbVersion
+    dbVersion: CURRENT_DB_VERSION
   });
 
   const json = JSON.stringify(backup, null, 2);
   const blob = new Blob([json], { type: 'application/json' });
-  const fileName = `backup-${currentDbVersion}-${Date.now()}.json`;
+  const fileName = `backup-${CURRENT_DB_VERSION}-${Date.now()}.json`;
 
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
@@ -36,7 +36,7 @@ export async function exportBackup({ includePlayers = true, uploadToCloud = fals
   if (uploadToCloud) {
     await addDoc(collection(db, 'backups'), {
       uploadedAt: serverTimestamp(),
-      dbVersion: currentDbVersion,
+      dbVersion: CURRENT_DB_VERSION,
       metadata: {
         entryCount: data.cadavres_exquis.length,
         playerCount: data.players?.length ?? 0
