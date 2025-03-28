@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file.
 
+# [0.4.0] - 2025-03-27
+
+### Added
+- **Admin GUI:** Introduced a new AdminPanel with three tabs:
+  - **New Entry:** A form to create new cadavre exquis entries with auto‑incremented numbering (placeholder for DB integration), multiple themes (with delete functionality and runner‑up selection), multi‑paragraph support with associated players, and a sound file attachment area.
+  - **Player Management:** A form for managing player profiles including name, email, a combined avatar file uploader (drag‑and‑drop and click‑to‑select), color picker with live preview, pattern seed input, and an existing players droplist (styled for dark mode).
+  - **Tests:** Integration of the existing TestDashboard with additional live tests for admin panel tab switching, entry form interactions, and player management interactions.
+- **Admin Log Overlay:** A floating console log overlay for admin users, styled as a chat-bubble column with semi‑transparent background, custom scrollbars, a copy-log button, and timestamped log messages.
+- **Test Enhancements:** All test results in TestDashboard are now timestamped.
+- **CSS Improvements:** Updated global CSS to refine scrollbar styles for light and dark themes, soften dark-mode text colors, and lighten placeholder text in dark mode.
+
+### Changed
+- Reworked the logging utility to support live log listeners for the Admin Log Overlay.
+- Updated component styling and tooltips across Admin GUI and TestDashboard for enhanced clarity and UX.
+
+### Fixed
+- Addressed minor UI inconsistencies in dark mode elements and integrated a more consistent design language for admin components.
+
 ## [0.3.1] - 2023-03-27
 
 ### Added

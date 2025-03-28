@@ -7,6 +7,8 @@ import NavigationBar from './components/NavigationBar';
 import CadavreExquisDisplay from './components/CadavreExquisDisplay';
 import AudioPlayer from './components/AudioPlayer';
 import DarkModeToggle from './components/DarkModeToggle';
+import AdminPanel from './components/AdminPanel';
+import AdminLogOverlay from './components/AdminLogOverlay';
 import { logEvent } from './utils/logger';
 import './App.css';
 
@@ -66,7 +68,7 @@ function App() {
             <button className="mt-2" onClick={handleLogout}>Logout</button>
             {isAdmin && (
               <div className="mt-4">
-                <TestDashboard />
+                <AdminPanel />
               </div>
             )}
           </div>
@@ -74,8 +76,10 @@ function App() {
           <button onClick={handleLogin}>Login with Google</button>
         )}
       </div>
+      {isAdmin && <AdminLogOverlay />}
     </div>
   );
 }
 
 export default App;
+

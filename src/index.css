@@ -21,9 +21,9 @@ html {
 
 .dark {
   --bg-dark: #242424;
-  --text-dark: #ffffff;
+  --text-dark: #e0e0e0; /* Softer off-white */
   --btn-bg-dark: #1a1a1a;
-  --btn-text-dark: #ffffff;
+  --btn-text-dark: #e0e0e0; /* Softer off-white */
   --container-bg-dark: #333333;
   --link-dark: #a5a5ff;
 }
@@ -42,7 +42,7 @@ html, body {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-  overflow-x: hidden; /* optional if you want to prevent any horizontal scroll */
+  overflow-x: hidden;
 }
 
 /* #root can simply be full width and auto height */
@@ -101,4 +101,48 @@ a:hover {
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
+}
+
+/* Placeholder styling */
+input::placeholder,
+textarea::placeholder {
+  color: #888888;
+}
+.dark input::placeholder,
+.dark textarea::placeholder {
+  color: #b3b3b3;
+}
+
+/* Custom scrollbar styling for light theme */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Custom scrollbar styling for dark theme */
+.dark ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.dark ::-webkit-scrollbar-track {
+  background: #444444;
+  border-radius: 4px;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: #666666;
+  border-radius: 4px;
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #888888;
 }
