@@ -1,23 +1,51 @@
 // src/utils/backup/importBackup.js
 
+import { setDoc, doc } from 'firebase/firestore';
 import { db } from '../../firebase/config';
-import { doc, setDoc } from 'firebase/firestore';
-import { currentDbVersion, runMigrationIfNeeded } from './migration';
+import { logEvent } from '../logger';
+import { CURRENT_DB_VERSION } from '../../constants';
+import { runMigrationIfNeeded } from './migration';
 
-export async function importBackup(json) {
-  if (!json || !json.data) throw new Error('Invalid backup file');
-  const originalVersion = json.dbVersion || 'unknown';
+/**
+ * Remove any undefined fields from an object to satisfy Firestore's requirements
+ */
+function sanitize(obj) {
+  return Object.fromEntries(Object.entries(obj).filter(([_, val]) => val !== undefined));
+}
 
-  const migrated = await runMigrationIfNeeded(json); // You write this to mutate json.data safely
-  const { cadavres_exquis = [], players = [] } = migrated.data;
+/**
+ * Import a backup (after optional migration) into Firestore.
+ */
+export async function importBackup(backup) {
+  const migrated = await runMigrationIfNeeded(backup);
+  const { data, dbVersion } = migrated;
+  const counts = { entries: 0, players: 0 };
 
-  for (const entry of cadavres_exquis) {
-    await setDoc(doc(db, 'cadavres_exquis', entry.id), entry);
+  // Import entries
+  if (Array.isArray(data?.cadavres_exquis)) {
+    for (const entry of data.cadavres_exquis) {
+      const clean = sanitize(entry);
+      const ref = doc(db, 'cadavres_exquis', clean.id);
+      await setDoc(ref, clean);
+      counts.entries++;
+      logEvent('ENTRY', `Imported entry ${clean.id}`);
+    }
   }
 
-  for (const player of players) {
-    await setDoc(doc(db, 'players', player.id), player);
+  // Import players
+  if (Array.isArray(data?.players)) {
+    for (const player of data.players) {
+      const clean = sanitize(player);
+      const ref = doc(db, 'players', clean.id);
+      await setDoc(ref, clean);
+      counts.players++;
+      logEvent('PLAYER', `Imported player ${clean.id}`);
+    }
   }
 
-  return { versionFrom: originalVersion, versionTo: currentDbVersion, imported: { entries: cadavres_exquis.length, players: players.length } };
+  return {
+    versionFrom: dbVersion,
+    versionTo: CURRENT_DB_VERSION,
+    imported: counts
+  };
 }
