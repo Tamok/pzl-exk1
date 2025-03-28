@@ -2,85 +2,101 @@
 
 All notable changes to this project will be documented in this file.
 
-# [0.4.0] - 2025-03-27
+# Changelog
 
-### Added
-- **Admin GUI:** Introduced a new AdminPanel with three tabs:
-  - **New Entry:** A form to create new cadavre exquis entries with auto‑incremented numbering (placeholder for DB integration), multiple themes (with delete functionality and runner‑up selection), multi‑paragraph support with associated players, and a sound file attachment area.
-  - **Player Management:** A form for managing player profiles including name, email, a combined avatar file uploader (drag‑and‑drop and click‑to‑select), color picker with live preview, pattern seed input, and an existing players droplist (styled for dark mode).
-  - **Tests:** Integration of the existing TestDashboard with additional live tests for admin panel tab switching, entry form interactions, and player management interactions.
-- **Admin Log Overlay:** A floating console log overlay for admin users, styled as a chat-bubble column with semi‑transparent background, custom scrollbars, a copy-log button, and timestamped log messages.
-- **Test Enhancements:** All test results in TestDashboard are now timestamped.
-- **CSS Improvements:** Updated global CSS to refine scrollbar styles for light and dark themes, soften dark-mode text colors, and lighten placeholder text in dark mode.
+## [0.5.9] (TODO)
+- **Added:** Finalized live integration for both PlayerManagement and CadavreExquisDisplay—components now operate directly with Firestore live data.
+- **Added:** Fully UUID‑based selectors to ensure accurate mapping between entries and player profiles.
+- **Added:** Integrated detailed paragraph-level statistics and emoji reactions linked via paragraph UUIDs.
+- **Changed:** Refined data service modularity for smooth, real‑time CRUD operations.
+- **Fixed:** Resolved synchronization issues between in-place editing and Firestore updates.
 
-### Changed
-- Reworked the logging utility to support live log listeners for the Admin Log Overlay.
-- Updated component styling and tooltips across Admin GUI and TestDashboard for enhanced clarity and UX.
+## [0.5.8] (TODO)
+- **Added:** Enabled in-place editing of paragraphs within CadavreExquisDisplay with full bidirectional synchronization between Slate and Firestore.
+- **Added:** Integrated live data fetching in PlayerManagement so that the player list updates immediately upon changes in Firestore.
+- **Changed:** Optimized Slate editor state management to minimize desynchronization issues.
+- **Fixed:** Addressed initial data load problems ensuring both editor and player management components reflect live data reliably.
 
-### Fixed
-- Addressed minor UI inconsistencies in dark mode elements and integrated a more consistent design language for admin components.
+## [0.5.7] (TODO)
+- **Added:** Revamped PlayerManagement to directly fetch and update player profiles via Firestore with full UUID integration.
+- **Added:** Introduced support for emoji reactions on paragraphs, linked via UUIDs to facilitate future paragraph-level stats.
+- **Changed:** Improved modularity and consistency of database service functions to support real‑time updates.
+- **Fixed:** Corrected initial data load issues in PlayerManagement to ensure a seamless live update experience.
 
-## [0.3.1] - 2023-03-27
+## [0.5.6] (TODO)
+- **Added:** Began implementation of emoji reactions for paragraphs using UUID.
+- **Added:** Initiated groundwork for paragraph-level statistics and interaction support.
 
-### Added
-- **Custom Favicon:** Replaced the default icon with a new PZL logo SVG, fully centered text.
-- **Box-Sizing Reset:** Applied `box-sizing: border-box` to prevent layout overflow.
+## [0.5.5] (TODO)
+- **Added:** Initiated in-place editing of paragraphs within CadavreExquisDisplay.
+- **Added:** Started integration of bidirectional synchronization for Slate editor state.
 
-### Changed
-- **Container Width:** Switched from `w-screen` to `w-full` to avoid horizontal overflow when a scrollbar appears.
-- **Layout Resets:** Removed leftover centering properties (`place-items: center`) and replaced them with a more flexible layout approach.
-- **Theme Integration:** Ensured all elements (header, test dashboard, etc.) correctly adapt to light/dark mode, with consistent transitions.
+## [0.5.4] (TODO)
+- **Added:** Improved reset behavior to prevent unwanted state loss.
+- **Added:** Began live form state modeling to better reflect real‑time user input.
 
-### Fixed
-- **Right-Side Truncation:** Addressed an issue causing the main container to be clipped on the right side in certain viewport configurations.
+## [0.5.3] - 2025-03-28 - Phase 5: Slate Integration & Enhanced Paragraph Support
+- **Added:** Switched ParagraphsTab to use Slate with proper use of the `initialValue` prop and safe validation fallback.
+- **Added:** Enhanced paragraph objects to include a unique `id`, rich `text` content, and an associated `player` reference.
+- **Changed:** Introduced `defaultSlateText()` and `validateSlateText()` utilities to guarantee valid initial editor content.
 
-## [0.3.0] - 2025-03-26 - Phase 3: Front-End Development & UI Enhancements
+## [0.5.2] - 2025-03-28 - Phase 5: Schema Normalization & Migration Support
+- **Added:** Normalized paragraph `text` to a Slate‑friendly format.
+- **Added:** Integrated `zod`‑based schema validation for imports.
+- **Added:** Introduced a Migration tab to detect and run Firestore upgrades, automatically updating the `dbVersion` post-migration.
 
-### Added
-- **Header Component**: Displays the logo and site name with click logging.
-- **NavigationBar Component**: Implements previous/next buttons and a dropdown for selecting cadavre exquis entries. Now the dropdown remains synchronized with the currently displayed entry.
-- **CadavreExquisDisplay Component**: Renders multiple, longer Lorem Ipsum paragraphs per entry. Each paragraph is styled with a random background color and shows the author’s name on hover.
-- **AudioPlayer Component**: Provides an HTML5 audio player that streams from Firebase Storage and logs play/pause events.
-- **DarkModeToggle Component**: Implements manual dark mode toggling that persists the user’s preference in localStorage.
-- **Global CSS Adjustments**: Removed default margins/padding from `html` and `body` to eliminate unwanted white borders, and ensured a full-width background.
+## [0.5.1] - 2025-03-28 - Phase 5: UUID Migration & Default Player Fields
+- **Added:** Performed migration to add UUIDs to paragraphs.
+- **Added:** Introduced default `patternSeed` values and default player `color`.
+- **Added:** Ensured entries include a `createdAt` timestamp and a fallback empty `paragraphs` array.
+- **Changed:** Split migrations into a versioned, linear path managed by `migrationEngine.js`.
 
-### Changed
-- Updated layout in `App.jsx` to integrate Phase 3 components and enforce responsive design using Tailwind CSS.
-- Modified the NavigationBar to properly reflect the current entry in the dropdown.
-- Enhanced dark mode styling by overriding the dark variant to use a custom `.dark` selector, ensuring dark mode utilities apply correctly.
+## [0.5.0] - 2025-03-28 - Phase 5: Data Management & Backup System
+- **Added:** Modularized Data Management tabs for backup, import, export, migration, and wipe operations.
+- **Added:** Implemented cloud backup with versioning and snapshots.
+- **Added:** Developed an import system with preview, migration, and robust error handling.
+- **Added:** Added export functionality with an optional player data toggle and cloud upload support.
+- **Added:** Introduced a wipe tab with per-collection and full wipe options.
+- **Changed:** Tracked Firestore version under `system/meta`.
 
-### Fixed
-- Resolved issues with the dark mode toggle (ensuring localStorage persistence and correct application of dark styles).
-- Adjusted dropdown styling in dark mode to improve readability.
-- Eliminated the white border around the main container by removing default browser margin/padding.
+## [0.4.0] - 2025-03-28 - Phase 4: Admin GUI & Live Data Integration
+- **Added:** Introduced a new AdminPanel with three tabs:
+  - **New Entry:** A form for creating cadavre exquis entries with auto‑incremented numbering, multiple themes (with delete and runner‑up selection), multi‑paragraph support with associated players, and sound file attachment.
+  - **Player Management:** A form for managing player profiles (including name, email, avatar upload via drag‑and‑drop and click‑to‑select), a color picker with live preview, a pattern seed input, and an existing players dropdown.
+  - **Tests:** Integrated TestDashboard with live tests for admin panel interactions.
+- **Added:** Implemented an Admin Log Overlay with live, timestamped logs and custom scrollbars.
+- **Changed:** Updated component styling and tooltips across the Admin GUI for enhanced clarity and UX.
+- **Fixed:** Addressed minor UI inconsistencies to ensure a consistent design language.
 
-## [0.2.0] - 2025-03-25 - Phase 2: Firebase Infrastructure & Admin Test Dashboard
+## [0.3.1] - 2025-03-28 - Phase 3.1: UI Polishing & Global Styling
+- **Added:** Replaced the default favicon with a new, centered PZL logo SVG.
+- **Added:** Applied `box-sizing: border-box` to prevent layout overflow.
+- **Changed:** Adjusted container width from `w-screen` to `w-full` to avoid horizontal overflow.
+- **Changed:** Removed leftover centering properties in favor of a more flexible layout.
+- **Changed:** Enhanced theme integration to ensure all elements (header, TestDashboard, etc.) adapt seamlessly to light/dark mode.
+- **Fixed:** Resolved right‑side truncation issues on specific viewports.
 
-### Added
+## [0.3.0] - 2025-03-28 - Phase 3: Front-End Development & UI Enhancements
+- **Added:** Header Component displaying the logo and site name with click logging.
+- **Added:** NavigationBar Component with previous/next buttons and a synchronized dropdown for cadavre exquis entries.
+- **Added:** CadavreExquisDisplay Component that renders multiple, styled paragraphs with dynamic background colors and tooltips.
+- **Added:** AudioPlayer Component that streams audio from Firebase Storage and logs play/pause events.
+- **Added:** DarkModeToggle Component for manual dark mode toggling with persisted user preference in localStorage.
+- **Added:** Global CSS adjustments to remove unwanted margins/padding and ensure full-width backgrounds.
+- **Changed:** Updated layout in App.jsx to integrate new components responsively.
+- **Fixed:** Resolved dark mode toggle issues and dropdown styling inconsistencies.
 
-- Firebase project setup including Authentication (Google Auth), Firestore, and Firebase Storage integration.
-- Admin authentication logic: Admin rights restricted to user `nautiluce@gmail.com`.
-- Security rules for Firebase Firestore and Storage to permit public reads and restrict writes to the admin user.
-- A collapsible Admin Test Dashboard component to validate Firebase integrations:
-  - **Auth Test:** Validate currently logged-in admin user.
-  - **Firestore CRUD Test:** Verify write, read, and delete operations.
-  - **Storage Test:** Confirm upload, retrieval, and deletion of files.
-  - **Firestore Collection Retrieval Test:** Ensure collection retrieval works as expected.
-  - **Realtime Listener Test:** Validate Firestore's real-time update capabilities.
-- Improved documentation in the README file to clearly outline setup, testing, and deployment instructions.
+## [0.2.0] - 2025-03-28 - Phase 2: Firebase Infrastructure & Admin Test Dashboard
+- **Added:** Firebase project setup including Authentication, Firestore, and Firebase Storage integration.
+- **Added:** Admin authentication logic restricting access to authorized users.
+- **Added:** Security rules for Firestore and Storage allowing public reads while restricting writes.
+- **Added:** A collapsible Admin Test Dashboard featuring tests for authentication, Firestore CRUD operations, Storage access, collection retrieval, and realtime listeners.
+- **Changed:** Streamlined README.md content for clearer setup, testing, and deployment instructions.
 
-### Changed
-
-- Streamlined README.md content for clarity and improved usability.
-
-## [0.1.0] - 2025-03-21 - Initial Setup
-
-### Added
-
-- Vite + React base project
-- Tailwind CSS
-- Firebase SDK and config file
-- Jest and testing infrastructure
-- Logger utility
-- Project folder structure
-- README and this changelog
+## [0.1.0] - 2025-03-28 - Initial Setup
+- **Added:** Vite + React base project.
+- **Added:** Tailwind CSS integration.
+- **Added:** Firebase SDK and configuration.
+- **Added:** Jest and testing infrastructure.
+- **Added:** Logger utility.
+- **Added:** Project folder structure and initial documentation (README and changelog).

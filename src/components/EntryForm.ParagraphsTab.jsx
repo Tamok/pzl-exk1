@@ -1,56 +1,73 @@
-// src/components/EntryForm.ParagraphsTab.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { createEditor } from 'slate';
 import { Slate, Editable, withReact } from 'slate-react';
 import { v4 as uuidv4 } from 'uuid';
 import { logEvent } from '../utils/logger';
-import { db } from '../firebase/config';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { db } from '../firebase/config';
 import { defaultSlateText } from '../utils/formDefaults';
 
+// Ensure each paragraph is properly initialized.
 const makeSafeParagraph = (p = {}) => ({
   id: p.id || uuidv4(),
-  text: Array.isArray(p.text) ? p.text : defaultSlateText(),
+  // Always set a valid initial content array.
+  text: Array.isArray(p.text) && p.text.length > 0 ? p.text : defaultSlateText(),
   player: p.player || '',
 });
 
-const ParagraphsTab = ({ paragraphs: rawParas, setParagraphs, players, refreshPlayers }) => {
-  // 🔐 Ensure safe initial paragraph state
-  const safeParas = rawParas.map(makeSafeParagraph);
-  const [localEditors, setLocalEditors] = useState(safeParas.map(() => withReact(createEditor())));
+const ParagraphsTab = ({ paragraphs = [], setParagraphs, players, refreshPlayers }) => {
+  // Initialize local editor instances only once based on the initial paragraphs.
+  const [localEditors, setLocalEditors] = useState(() =>
+    paragraphs.map(() => withReact(createEditor()))
+  );
 
-  // Keep paragraphs sanitized from the start
-  React.useEffect(() => {
-    const corrected = rawParas.map(makeSafeParagraph);
-    setParagraphs(corrected);
-  }, []);
+  // Keep local editor instances in sync with the number of paragraphs.
+  useEffect(() => {
+    setLocalEditors(prev => {
+      if (prev.length < paragraphs.length) {
+        const additional = Array(paragraphs.length - prev.length)
+          .fill(null)
+          .map(() => withReact(createEditor()));
+        return [...prev, ...additional];
+      } else if (prev.length > paragraphs.length) {
+        return prev.slice(0, paragraphs.length);
+      }
+      return prev;
+    });
+  }, [paragraphs.length]);
 
+  // Add a new paragraph.
   const addParagraph = () => {
-    const para = makeSafeParagraph();
-    setParagraphs(prev => [...prev, para]);
-    setLocalEditors(prev => [...prev, withReact(createEditor())]);
+    const newPara = makeSafeParagraph();
+    setParagraphs(prev => [...prev, newPara]);
     logEvent('FORM', 'Added paragraph');
   };
 
+  // Delete a paragraph (ensuring at least one remains).
   const deleteParagraph = (index) => {
-    if (rawParas.length <= 1) return;
-
-    const updatedParas = [...rawParas];
-    const updatedEditors = [...localEditors];
-    updatedParas.splice(index, 1);
-    updatedEditors.splice(index, 1);
-
-    setParagraphs(updatedParas);
-    setLocalEditors(updatedEditors);
+    if (paragraphs.length <= 1) return;
+    setParagraphs(prev => prev.filter((_, i) => i !== index));
     logEvent('FORM', 'Deleted paragraph');
   };
 
+  // Update a specific field in a paragraph.
+  // For the "text" field, ensure a valid array is always set.
   const updateParagraphField = (index, field, value) => {
-    const updated = [...rawParas];
-    updated[index][field] = value;
-    setParagraphs(updated);
+    setParagraphs(prev => {
+      const updated = [...prev];
+      if (field === 'text') {
+        updated[index] = {
+          ...updated[index],
+          [field]: Array.isArray(value) && value.length > 0 ? value : defaultSlateText(),
+        };
+      } else {
+        updated[index] = { ...updated[index], [field]: value };
+      }
+      return updated;
+    });
   };
 
+  // Add an anonymous player and assign its ID to the paragraph.
   const addAnonymousPlayer = async (index) => {
     const name = prompt("Enter name for the new player:");
     if (!name) return;
@@ -69,22 +86,25 @@ const ParagraphsTab = ({ paragraphs: rawParas, setParagraphs, players, refreshPl
     const docRef = await addDoc(collection(db, 'players'), newPlayer);
     logEvent('PLAYER', `Created anon player ${name} (ID: ${docRef.id})`);
 
-    await refreshPlayers?.();
+    if (refreshPlayers) await refreshPlayers();
     updateParagraphField(index, 'player', docRef.id);
   };
 
   return (
     <div className="space-y-6">
-      {rawParas.map((para, index) => {
-        const editor = localEditors[index] ?? withReact(createEditor());
-        const value = Array.isArray(para.text) ? para.text : defaultSlateText();
+      {paragraphs.map((para, index) => {
+        // Use a stable editor instance for this paragraph.
+        const editor = localEditors[index] || withReact(createEditor());
+        // Ensure the initial content is a valid array.
+        const initialContent = Array.isArray(para.text) && para.text.length > 0 ? para.text : defaultSlateText();
 
         return (
-          <div key={para.id || index} className="p-4 border rounded bg-gray-800 space-y-3">
+          <div key={para.id} className="p-4 border rounded bg-gray-800 space-y-3">
             <label className="block font-semibold text-sm">Paragraph {index + 1}</label>
             <Slate
               editor={editor}
-              value={value}
+              // Use initialValue (the one-time initial content) instead of value.
+              initialValue={initialContent}
               onChange={(val) => updateParagraphField(index, 'text', val)}
             >
               <Editable
@@ -117,7 +137,7 @@ const ParagraphsTab = ({ paragraphs: rawParas, setParagraphs, players, refreshPl
               </button>
             </div>
 
-            {rawParas.length > 1 && (
+            {paragraphs.length > 1 && (
               <button
                 type="button"
                 onClick={() => deleteParagraph(index)}
