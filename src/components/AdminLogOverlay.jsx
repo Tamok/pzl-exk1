@@ -86,7 +86,7 @@ const AdminLogOverlay = () => {
   const filteredLogs = combinedLogs.filter(entry => {
     const match = entry.match(/^\[(.*?)\]\[(.*?)\] (.*)$/);
     if (!match) return false;
-    const [_, ts, tag, msg] = match;
+    const [_, ts, tag, ] = match;
     const tagMatch = (selectedTags.includes('ALL') || selectedTags.includes(tag));
     const searchMatch = (!search || entry.toLowerCase().includes(search.toLowerCase()));
     const timeMatch = (!recentOnly || (Date.now() - new Date(ts).getTime()) < 10 * 60 * 1000);
