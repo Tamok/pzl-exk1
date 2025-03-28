@@ -1,1 +1,3 @@
-export const CURRENT_DB_VERSION = 5;
+// src/constants.js
+export const CURRENT_DB_VERSION = '0.5.4';
+

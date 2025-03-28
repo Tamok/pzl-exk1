@@ -3,7 +3,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { importBackup } from '../utils/backup/importBackup';
 import { validateBackup } from '../utils/backup/backupSchema';
-import { runMigrationIfNeeded } from '../utils/backup/migration';
+import { migrateBackupJson } from '../utils/migrationEngine.js';
 import { CURRENT_DB_VERSION } from '../constants';
 import { logEvent } from '../utils/logger';
 
@@ -57,7 +57,7 @@ const DataImportTab = () => {
   };
 
   const runMigration = async () => {
-    const migrated = await runMigrationIfNeeded(importPreview);
+    const migrated = await migrateBackupJson(importPreview);
     setImportPreview(migrated);
     logEvent('DATA', `Migrated backup to v${CURRENT_DB_VERSION}`);
   };

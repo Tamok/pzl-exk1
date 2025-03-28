@@ -4,21 +4,21 @@ import { setDoc, doc } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 import { logEvent } from '../logger';
 import { CURRENT_DB_VERSION } from '../../constants';
-import { runMigrationIfNeeded } from './migration';
+import { migrateBackupJson } from '../migrationEngine';
 import { createSnapshot } from './createSnapshot';
 
 /**
  * Remove any undefined fields from an object to satisfy Firestore's requirements
  */
 function sanitize(obj) {
-  return Object.fromEntries(Object.entries(obj).filter(([_, val]) => val !== undefined));
+  return Object.fromEntries(Object.entries(obj).filter(([, val]) => val !== undefined));
 }
 
 /**
  * Import a backup (after optional migration) into Firestore.
  */
 export async function importBackup(backup) {
-  const migrated = await runMigrationIfNeeded(backup);
+  const migrated = migrateBackupJson(backup); // new unified migration path
   const { data, dbVersion } = migrated;
   const counts = { entries: 0, players: 0 };
   await createSnapshot('pre-import');
