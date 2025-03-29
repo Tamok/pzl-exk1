@@ -1,29 +1,31 @@
 // src/components/CadavreExquisEntryForm.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { getNextEntryNumber } from '../utils/entryUtils';
 import { uploadSoundFile } from '../firebase/services/storage';
 import { createEntry } from '../firebase/services/entries';
 import { usePlayers } from '../hooks/usePlayers';
 import { logEvent } from '../utils/logger';
-import { newParagraph } from '../utils/formDefaults';
+import { newParagraph, defaultSlateText } from '../utils/formDefaults';
+import { v4 as uuidv4 } from 'uuid';
+import { useLiveFormState } from '../hooks/useLiveFormState';
 
 import TitleThemesTab from './EntryForm.TitleThemesTab';
 import ParagraphsTab from './EntryForm.ParagraphsTab';
 import AudioTab from './EntryForm.AudioTab';
-import { v4 as uuidv4 } from 'uuid';
-import { defaultSlateText } from '../utils/formDefaults';
 
 const CadavreExquisEntryForm = () => {
   const [entryNumber, setEntryNumber] = useState(1);
   const players = usePlayers();
   const [currentTab, setCurrentTab] = useState('title');
 
-  const [title, setTitle] = useState('');
-  const [themes, setThemes] = useState([{ name: '', voteCount: 0, isRunnerUp: false }]);
-  const [paragraphs, setParagraphs] = useState([
+  // Use live state hooks to persist unsaved form data.
+  const [title, setTitle] = useLiveFormState('entry-title', '');
+  const [themes, setThemes] = useLiveFormState('entry-themes', [{ name: '', voteCount: 0, isRunnerUp: false }]);
+  const [paragraphs, setParagraphs] = useLiveFormState('entry-paragraphs', [
     { text: defaultSlateText(), player: '', id: uuidv4() }
   ]);
   
+  // Sound file remains transient (file objects cannot be serialized)
   const [soundFile, setSoundFile] = useState(null);
 
   useEffect(() => {
@@ -48,15 +50,20 @@ const CadavreExquisEntryForm = () => {
       soundUrl,
     };
 
-    await createEntry(entryData);
-    alert(`🎉 Entry #${entryNumber} submitted successfully!`);
-
-    // Reset form
-    setTitle('');
-    setThemes([{ name: '', voteCount: 0, isRunnerUp: false }]);
-    setParagraphs([newParagraph()]);
-    setSoundFile(null);
-    setCurrentTab('title');
+    try {
+      await createEntry(entryData);
+      alert(`🎉 Entry #${entryNumber} submitted successfully!`);
+      // Reset form state and clear localStorage for these keys by reinitializing
+      setTitle('');
+      setThemes([{ name: '', voteCount: 0, isRunnerUp: false }]);
+      setParagraphs([newParagraph()]);
+      setSoundFile(null);
+      setCurrentTab('title');
+      logEvent('ENTRY', `Entry #${entryNumber} reset completed`);
+    } catch (error) {
+      logEvent('ERROR', `Entry submission failed: ${error.message}`);
+      alert('Submission failed. Please try again.');
+    }
   };
 
   const tabNav = [
