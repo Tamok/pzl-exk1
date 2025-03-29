@@ -1,11 +1,12 @@
 // src/components/CadavreExquisDisplay.jsx
 import React from 'react';
 import { logEvent } from '../utils/logger';
+import EditableParagraph from './EditableParagraph';
 
-const CadavreExquisDisplay = ({ content }) => {
+const CadavreExquisDisplay = ({ content, onParagraphChange }) => {
   // Predefined background classes defined in tailwind.css
   const randomClasses = ["bg-random-1", "bg-random-2", "bg-random-3", "bg-random-4"];
-  
+
   const getRandomClass = () => {
     return randomClasses[Math.floor(Math.random() * randomClasses.length)];
   };
@@ -15,15 +16,21 @@ const CadavreExquisDisplay = ({ content }) => {
       {content.map((para, index) => {
         const bgClass = getRandomClass();
         return (
-          <p
+          <div
             key={index}
-            className={`mb-4 p-4 rounded leading-relaxed transition-colors duration-200
-                        text-[var(--text-light)] dark:text-[var(--text-dark)] ${bgClass}`}
+            className={`mb-4 p-4 rounded leading-relaxed transition-colors duration-200 ${bgClass}`}
             title={`By: ${para.author}`}
-            onMouseEnter={() => logEvent('DISPLAY', `Hovering on paragraph ${index}`)}
           >
-            {para.text}
-          </p>
+            <EditableParagraph
+              initialValue={para.text}
+              onChange={newValue => {
+                logEvent('DISPLAY', `Paragraph ${index} updated in-place`);
+                if (onParagraphChange) {
+                  onParagraphChange(index, newValue);
+                }
+              }}
+            />
+          </div>
         );
       })}
     </div>
