@@ -7,12 +7,14 @@ import TestDashboard from './TestDashboard';
 import DataManagement from './DataManagement';
 import ErrorBoundary from './ErrorBoundary';
 import { logEvent } from '../utils/logger';
+import EmojiManager from './EmojiManager';
 
 const tabs = {
   entry: 'New Entry',
   players: 'Player Management',
   tests: 'Tests',
-  data: 'Data Management'
+  data: 'Data Management',
+  emoji: 'Emoji Management',
 };
 
 const AdminPanel = () => {
@@ -24,6 +26,7 @@ const AdminPanel = () => {
       case 'players': return <PlayerManagement />;
       case 'tests': return <TestDashboard />;
       case 'data': return <DataManagement />;
+      case 'emoji': return <EmojiManager />;
       default: return null;
     }
   };

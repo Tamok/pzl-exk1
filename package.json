@@ -11,6 +11,8 @@
     "test": "jest"
   },
   "dependencies": {
+    "@ffmpeg/ffmpeg": "^0.12.15",
+    "@ffmpeg/util": "^0.12.2",
     "firebase": "^11.5.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

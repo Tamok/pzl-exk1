@@ -22,3 +22,12 @@ export const uploadSoundFile = async (file) => {
     throw new Error('Failed to upload sound file.');
   }
 };
+
+export const uploadEmojiFile = async (fileBlob, originalName) => {
+  const filePath = `emojis/${Date.now()}_${originalName}`;
+  const fileRef = ref(storage, filePath);
+  await uploadBytes(fileRef, fileBlob);
+  const url = await getDownloadURL(fileRef);
+  logEvent('EMOJI', `Uploaded emoji file: ${originalName}`);
+  return url;
+};
