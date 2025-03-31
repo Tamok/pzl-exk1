@@ -11,12 +11,19 @@ All notable changes to this project will be documented in this file.
 - **Changed:** Refined data service modularity for smooth, real‑time CRUD operations.
 - **Fixed:** Resolved synchronization issues between in-place editing and Firestore updates.
 
-## [0.5.8] (TODO)
-- **Added:** Enabled in-place editing of paragraphs within CadavreExquisDisplay with full bidirectional synchronization between Slate and Firestore.
+## [0.5.8] - 2025-03-28 - Phase 5: In-Place Editing & Bidirectional Slate Sync
+- **Added:** Enabled in-place editing of paragraphs within CadavreExquisDisplay via the new EditableParagraph component.
+- **Added:** Integrated full bidirectional synchronization between the Slate editor state and Firestore: updates on blur trigger Firestore updates, and external Firestore changes update the editor.
 
-## [0.5.7] (TODO)
-- **Added:** Revamped PlayerManagement to directly fetch and update player profiles via Firestore with full UUID integration.
-- **Added:** Introduced support for emoji reactions on paragraphs, linked via UUIDs to facilitate future paragraph-level stats.
+## [0.5.7] - 2025-03-28 - Phase 5: Player Management Revamp & Emoji Reaction Integration
+- **Added:** Revamped PlayerManagement by splitting it into subtabs:
+  - **List:** A searchable player list displaying profiles with unique keys, including main vs. linked profile indicators and placeholders for linked entries/visual maps.
+  - **Add:** A form to create new players with mandatory fields (name, pattern seed) and an optional email (with a warning if empty).
+  - **Statistics:** A placeholder for future aggregated statistics and backend analytics.
+- **Added:** Integrated Firestore-based CRUD operations with full UUID integration for persistent player profiles.
+- **Added:** A "Select All" button in the player management view for mass selection and deletion.
+- **Added:** Support for emoji reactions on paragraphs, linked via UUIDs to enable future paragraph-level statistics.
+
 
 ## [0.5.6] - 2025-03-28 - Phase 5: Emoji Reactions, Custom Emoji Management & Statistics Groundwork
 - **Added:** Comprehensive emoji manager with drag‑and‑drop file selection and multi‑file upload.
