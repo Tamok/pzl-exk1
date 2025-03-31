@@ -13,27 +13,26 @@ All notable changes to this project will be documented in this file.
 
 ## [0.5.8] (TODO)
 - **Added:** Enabled in-place editing of paragraphs within CadavreExquisDisplay with full bidirectional synchronization between Slate and Firestore.
-- **Added:** Integrated live data fetching in PlayerManagement so that the player list updates immediately upon changes in Firestore.
-- **Changed:** Optimized Slate editor state management to minimize desynchronization issues.
-- **Fixed:** Addressed initial data load problems ensuring both editor and player management components reflect live data reliably.
 
 ## [0.5.7] (TODO)
 - **Added:** Revamped PlayerManagement to directly fetch and update player profiles via Firestore with full UUID integration.
 - **Added:** Introduced support for emoji reactions on paragraphs, linked via UUIDs to facilitate future paragraph-level stats.
-- **Changed:** Improved modularity and consistency of database service functions to support real‑time updates.
-- **Fixed:** Corrected initial data load issues in PlayerManagement to ensure a seamless live update experience.
 
-## [0.5.6] (TODO)
-- **Added:** Began implementation of emoji reactions for paragraphs using UUID.
-- **Added:** Initiated groundwork for paragraph-level statistics and interaction support.
+## [0.5.6] - 2025-03-28 - Phase 5: Emoji Reactions, Custom Emoji Management & Statistics Groundwork
+- **Added:** Comprehensive emoji manager with drag‑and‑drop file selection and multi‑file upload.
+- **Added:** Custom name input for each queued file (defaults to filename if left blank).
+- **Added:** Dynamic processing status indicators (⌛ pending, ⏳ processing, ✅ success, ❌ error) for each file.
+- **Added:** MP4 to animated GIF conversion and animated GIF resizing via ffmpeg.wasm (v0.12+), with converted file size displayed.
+- **Added:** Persistence of emoji records in Firestore (using UUID, name, URL, size, and type) and support for multi‑selection (including a “Select All” button) for mass deletion.
+- **Changed:** Emoji previews are rendered as fixed 64×64 squares with object‑cover styling.
 
-## [0.5.5] (TODO)
-- **Added:** Initiated in-place editing of paragraphs within CadavreExquisDisplay.
-- **Added:** Started integration of bidirectional synchronization for Slate editor state.
+## [0.5.5] - 2025-03-28 - Phase 5: In‑Place Editing & Slate Synchronization
+- **Added:** Initiated in‑place editing of paragraphs within CadavreExquisDisplay via a dedicated EditableParagraph component.
+- **Added:** Integrated bidirectional synchronization between Slate editor state and parent component state for real‑time updates.
 
-## [0.5.4] (TODO)
-- **Added:** Improved reset behavior to prevent unwanted state loss.
-- **Added:** Began live form state modeling to better reflect real‑time user input.
+## [0.5.4] - 2025-03-28 - Phase 5: Live Form State Modeling & Reset Behavior Improvements
+- **Added:** Improved reset behavior to prevent unwanted state loss upon submission.
+- **Added:** Introduced live form state modeling via the useLiveFormState hook, synchronizing form fields (title, themes, paragraphs) with localStorage for real‑time persistence.
 
 ## [0.5.3] - 2025-03-28 - Phase 5: Slate Integration & Enhanced Paragraph Support
 - **Added:** Switched ParagraphsTab to use Slate with proper use of the `initialValue` prop and safe validation fallback.
@@ -68,7 +67,7 @@ All notable changes to this project will be documented in this file.
 - **Changed:** Updated component styling and tooltips across the Admin GUI for enhanced clarity and UX.
 - **Fixed:** Addressed minor UI inconsistencies to ensure a consistent design language.
 
-## [0.3.1] - 2025-03-28 - Phase 3.1: UI Polishing & Global Styling
+## [0.3.1] - 2025-03-28 - Phase 3: UI Polishing & Global Styling
 - **Added:** Replaced the default favicon with a new, centered PZL logo SVG.
 - **Added:** Applied `box-sizing: border-box` to prevent layout overflow.
 - **Changed:** Adjusted container width from `w-screen` to `w-full` to avoid horizontal overflow.

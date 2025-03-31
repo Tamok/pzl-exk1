@@ -89,19 +89,22 @@ const EmojiManager = () => {
       // For MP4: convert to animated GIF
       if (file.type === 'video/mp4') {
         if (!ffmpeg.loaded) await ffmpeg.load();
-        const mp4FileName = 'input.mp4';
-        const gifFileName = 'output.gif';
+        const uniqueId = Date.now();
+        const mp4FileName = `input-${uniqueId}.mp4`;
+        const gifFileName = `output-${uniqueId}.gif`;
         await ffmpeg.writeFile(mp4FileName, await fetchFile(file));
         await ffmpeg.exec(['-i', mp4FileName, '-vf', 'fps=10,scale=64:-1:flags=lanczos', gifFileName]);
         const data = await ffmpeg.readFile(gifFileName);
         const gifBlob = new Blob([data.buffer], { type: 'image/gif' });
-        return { fileBlob: gifBlob, convertedSize: gifBlob.size, type: 'video/mp4-converted' };
+        // Note: set type to image/gif so that it renders as an image
+        return { fileBlob: gifBlob, convertedSize: gifBlob.size, type: 'image/gif' };
       }
       // For animated GIF: resize while preserving animation
       if (file.type === 'image/gif') {
         if (!ffmpeg.loaded) await ffmpeg.load();
-        const inputGif = 'input.gif';
-        const outputGif = 'output.gif';
+        const uniqueId = Date.now();
+        const inputGif = `input-${uniqueId}.gif`;
+        const outputGif = `output-${uniqueId}.gif`;
         await ffmpeg.writeFile(inputGif, await fetchFile(file));
         await ffmpeg.exec(['-i', inputGif, '-vf', 'scale=64:-1:flags=lanczos', outputGif]);
         const data = await ffmpeg.readFile(outputGif);
@@ -347,7 +350,7 @@ const EmojiManager = () => {
             emojis.map((emoji) => (
               <div key={emoji.id} className="flex flex-col items-center border p-2 rounded">
                 <div className="relative h-12 w-12">
-                  {emoji.type.startsWith('video/') || emoji.type === 'video/mp4-converted' ? (
+                  {emoji.type.startsWith('video/') ? (
                     <video 
                       src={emoji.emojiUrl} 
                       className="h-full w-full object-cover" 
