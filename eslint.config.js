@@ -30,4 +30,10 @@ export default [
       ],
     },
   },
+  {
+    files: ['babel.config.js', 'jest.config.js', 'vite.config.js'],
+    languageOptions: {
+      globals: globals.node,
+    },
+  },
 ]
