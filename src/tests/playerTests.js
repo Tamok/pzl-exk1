@@ -1,5 +1,5 @@
-import { createPlayer, updatePlayer, deletePlayer } from '../firebase/services/players';
-import { mergePlayers, getPlayerMapping } from '../firebase/services/playerMappings';
+import { createPlayer, updatePlayer, deletePlayer } from '../firebase/services/players.js';
+import { mergePlayers, getPlayerMapping } from '../firebase/services/playerMappings.js';
 
 export const tests = [
   {
