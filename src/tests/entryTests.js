@@ -1,4 +1,4 @@
-import { createEntry, updateEntry, deleteEntry } from '../firebase/services/entries';
+import { createEntry, updateEntry, deleteEntry } from '../firebase/services/entries.js';
 
 export const tests = [
   {

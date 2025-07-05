@@ -1,5 +1,5 @@
 import { getAuth } from 'firebase/auth';
-import { db, storage } from '../firebase/config';
+import { db, storage } from '../firebase/config.js';
 import { collection, getDocs } from 'firebase/firestore';
 import { ref, getMetadata } from 'firebase/storage';
 
