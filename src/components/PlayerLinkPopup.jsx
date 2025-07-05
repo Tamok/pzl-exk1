@@ -1,5 +1,5 @@
 // src/components/PlayerLinkPopup.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { logEvent } from '../utils/logger';
 
 /**
@@ -24,9 +24,11 @@ const PlayerLinkPopup = ({ players, targetPlayer, onConfirm, onCancel }) => {
   // Pre-select existing links:
   // For entry: pre-select the main profile that is currently linked (if any)
   // For main: pre-select those in linkedMainIds (or empty array if not set)
-  const initialSelected = mode === 'entry'
-    ? (targetPlayer.mainId ? [targetPlayer.mainId] : [])
-    : (targetPlayer.linkedMainIds || []);
+  const initialSelected = useMemo(() => {
+    return mode === 'entry'
+      ? (targetPlayer.mainId ? [targetPlayer.mainId] : [])
+      : (targetPlayer.linkedMainIds || []);
+  }, [mode, targetPlayer.mainId, targetPlayer.linkedMainIds]);
 
   const [selected, setSelected] = useState(new Set(initialSelected));
 

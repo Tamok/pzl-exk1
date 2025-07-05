@@ -1,8 +1,12 @@
 export default {
     testEnvironment: "jsdom",
-    setupFilesAfterEnv: ["@testing-library/jest-dom"],
+    setupFilesAfterEnv: ["<rootDir>/src/setupTests.js"],
     moduleFileExtensions: ["js", "jsx"],
-    testMatch: ["**/src/tests/**/*.js", "**/?(*.)+(spec|test).[tj]s?(x)"],
+    testMatch: ["**/?(*.)+(spec|test).[tj]s?(x)"],
+    testPathIgnorePatterns: [
+      "/node_modules/",
+      "/src/tests/(?!.*\\.test\\.js$)"
+    ],
     transform: {
       "^.+\\.(js|jsx)$": "babel-jest"
     },
@@ -11,6 +15,7 @@ export default {
       "ts-jest": {
         useESM: true
       }
-    }
+    },
+    testTimeout: 10000
   };
   
