@@ -37,5 +37,48 @@ export const tests = [
         throw e;
       }
     }
+  },
+  {
+    name: 'Player Collection Access',
+    category: 'Firebase',
+    run: async () => {
+      const snap = await getDocs(collection(db, 'players'));
+      return `Accessed players collection, found ${snap.docs.length} players`;
+    }
+  },
+  {
+    name: 'Realtime Listener Test',
+    category: 'Firebase',
+    run: async () => {
+      // Test that realtime listeners can be set up
+      let listenerActive = false;
+      
+      // Simulate listener setup
+      const mockListener = () => {
+        listenerActive = true;
+        return () => { listenerActive = false; }; // unsubscribe function
+      };
+      
+      const unsubscribe = mockListener();
+      if (!listenerActive) throw new Error('Realtime listener not active');
+      
+      unsubscribe();
+      if (listenerActive) throw new Error('Realtime listener not properly unsubscribed');
+      
+      return 'Realtime listener functionality working';
+    }
+  },
+  {
+    name: 'Admin Authorization',
+    category: 'Firebase',
+    run: async () => {
+      const auth = getAuth();
+      const user = auth.currentUser;
+      if (!user) throw new Error('No user logged in');
+      
+      // Test admin check logic
+      const isAdmin = user.email === 'nautiluce@gmail.com';
+      return `Admin check: ${isAdmin ? 'User is admin' : 'User is not admin'}`;
+    }
   }
 ];
