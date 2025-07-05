@@ -84,6 +84,22 @@ const migrations = [
         logEvent('MIGRATION', `Slate-normalized entry ${docSnap.id}`);
       }
     }
+  },
+  {
+    from: '0.5.4',
+    to: '0.5.9a',
+    label: 'Initialize linkedMainIds for main profiles',
+    migrate: async () => {
+      const snap = await getDocs(collection(db, 'players'));
+      for (const docSnap of snap.docs) {
+        const data = docSnap.data();
+        // For Main Profiles (players with an email), ensure linkedMainIds is set
+        if (data.email && data.email.trim() !== '' && data.linkedMainIds === undefined) {
+          await updateDoc(docSnap.ref, { linkedMainIds: [] });
+          logEvent('MIGRATION', `Initialized linkedMainIds for player ${docSnap.id}`);
+        }
+      }
+    }
   }
 ];
 

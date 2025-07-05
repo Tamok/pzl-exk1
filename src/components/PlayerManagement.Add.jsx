@@ -15,14 +15,14 @@ const PlayerManagementAdd = ({ onPlayerAdded }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Email is optional here. Warn if empty.
+    // Warn if email is empty – such players are considered Entry Profiles.
     if (!newPlayer.email.trim()) {
-      alert("Warning: Players without an email will need to be linked to a main account.");
+      alert("Warning: Players without an email will be considered an Entry Profile and can be linked to a main account.");
     }
     setLoading(true);
     try {
       const created = await createPlayer(newPlayer);
-      logEvent('PLAYER', `Created player ${created.uuid} (${newPlayer.name || 'No Name'})`);
+      logEvent('PLAYER', `Created player ${created} (${newPlayer.name || 'No Name'})`);
       onPlayerAdded && onPlayerAdded(created);
       setNewPlayer({ name: '', email: '', color: '#ffffff', patternSeed: 'default-seed', avatarUrl: '' });
     } catch (error) {
@@ -35,6 +35,9 @@ const PlayerManagementAdd = ({ onPlayerAdded }) => {
   return (
     <div className="p-4">
       <h3 className="text-lg font-semibold mb-2">Add New Player</h3>
+      <p className="text-sm text-gray-500 mb-4">
+        Note: Players without an email will be considered an Entry Profile and can be linked to a main account.
+      </p>
       <form onSubmit={handleSubmit} className="space-y-3">
         <input
           type="text"
@@ -51,11 +54,6 @@ const PlayerManagementAdd = ({ onPlayerAdded }) => {
           placeholder="Email (optional)"
           className="w-full p-2 border rounded"
         />
-        {!newPlayer.email.trim() && (
-          <p className="text-xs text-orange-500">
-            Players without an email will need to be linked to a main account.
-          </p>
-        )}
         <div className="flex items-center space-x-2">
           <label className="text-sm">Color:</label>
           <input
